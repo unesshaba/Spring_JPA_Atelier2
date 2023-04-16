@@ -17,40 +17,44 @@ public class App1Tp1Application implements CommandLineRunner {
 
     @Autowired
     private Irepositories irepositories;
+
     public static void main(String[] args) {
+
         SpringApplication.run(App1Tp1Application.class, args);
     }
 
     @Override
     public void run(String... args) throws Exception {
-        irepositories.save(new Patient(null, "Othmane", new Date(), false, 30));
-        irepositories.save(new Patient(null, "Darhoni", new Date(), false, 50));
 
-        for(int i=0; i<20; i++){
-            irepositories.save(new Patient(null, "TestPatient", new Date(), false, 120));
-        }
+            //************* Ajouter des Patients  ****************************
+            irepositories.save(new Patient(null, "Othmane", new Date(), false, 120));
+            irepositories.save(new Patient(null, "Youness", new Date(), true, 220));
+            irepositories.save(new Patient(null, "Ismail", new Date(), false, 320));
+            irepositories.save(new Patient(null, "Simo", new Date(), true, 420));
 
-        Page<Patient> patients =  irepositories.findAll(PageRequest.of(1,5));
-        System.out.println("Nombre de page : " + patients.getTotalPages());
 
-        List<Patient> content = patients.getContent();
-        content.forEach(p -> {
-            System.out.println("==============================");
-            System.out.println(p.getId());
-            System.out.println(p.getNom());
-            System.out.println(p.getDateNaissance());
-            System.out.println(p.getScore());
-            System.out.println(p.isMalade());
-        });
+            //************* Afficher tous Patients ****************************
+            List<Patient> patients = irepositories.findAll();
+            patients.forEach(p  -> {
+                System.out.println(p.getId());
+                System.out.println(p.getNom());
+                System.out.println(p.getDateNaissance());
+                System.out.println(p.isMalade());
+                System.out.println(p.getScore());
+            });
 
-        System.out.println("*************Get By ID**************");
-        Patient patient = irepositories.findById(1L).orElse(null);
-        if(patient!=null){
-            System.out.println(patient.getNom());
-        }
+            //************* FInd Patient By Id ****************************
+            Patient patient = irepositories.findById(1L).orElse(null);
 
-        patient.setScore(10);
-        irepositories.save(patient);
+            //************ Update Patient Name ***************************
+            patient.setNom("Darhoni");
+            irepositories.save(patient);
 
+            //*********** Chercher Patient ********************************
+            Patient patient2 = irepositories.findByNom("Youness");
+            System.out.println(patient2.getScore());
+
+            //*********** Delete Patient ********************************
+            irepositories.deleteById(1L);
     }
 }

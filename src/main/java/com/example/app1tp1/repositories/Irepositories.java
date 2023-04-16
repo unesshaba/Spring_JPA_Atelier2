@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import javax.swing.*;
 
 public interface Irepositories extends JpaRepository<Patient, Long> {
-
+    Patient findByNom(String name);
 }
